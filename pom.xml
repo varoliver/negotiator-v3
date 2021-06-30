@@ -5,6 +5,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>application</module>
+        <module>domain</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -14,12 +15,14 @@
     </parent>
     <groupId>eu.bbmri.eric.csit.service.negotiator</groupId>
     <artifactId>negotiator</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>3.0.1</version>
     <name>negotiator</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Negotiator v3 technology upgrade</description>
+
     <properties>
         <java.version>11</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
