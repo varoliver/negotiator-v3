@@ -9,18 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>application</artifactId>
+    <artifactId>repository</artifactId>
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>eu.bbmri.eric.csit.service.negotiator</groupId>
-            <artifactId>repository</artifactId>
+            <artifactId>domain</artifactId>
             <version>3.0.1</version>
-            <scope>test</scope>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
