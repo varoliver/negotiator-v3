@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 class NegotiatorApplicationTests {
@@ -25,8 +27,11 @@ class NegotiatorApplicationTests {
     private FormRequestRepository formRequestRepository;
 
     @Test
-    void contextLoads() {
+    void integrationTestForDatabase() {
         personRepository.save(new Person());
+        personRepository.flush();
+
+        personRepository.save(createPerson());
         personRepository.flush();
 
         requestRepository.save(new Request());
@@ -36,4 +41,15 @@ class NegotiatorApplicationTests {
         personRepository.flush();
     }
 
+    private Person createPerson() {
+        Person person = new Person();
+        person.setAut_email("robert.reihs@gmail.com");
+        person.setAuth_name("Robert Reihs");
+        person.setOrganization("BBMRI-ERIC");
+        person.setCreated_by(1L);
+        person.setModified_by(1L);
+        person.setCreation_date(new Date());
+        person.setModified_date(new Date());
+        return person;
+    }
 }

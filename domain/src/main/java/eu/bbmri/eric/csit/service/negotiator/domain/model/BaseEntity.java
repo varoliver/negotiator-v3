@@ -2,6 +2,7 @@ package eu.bbmri.eric.csit.service.negotiator.domain.model;
 
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @Entity
 @Getter
+@Setter
 // Choose your inheritance strategy:
 //@Inheritance(strategy=InheritanceType.JOINED)
 //@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
