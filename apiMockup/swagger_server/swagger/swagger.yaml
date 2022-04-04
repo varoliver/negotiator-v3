@@ -1,0 +1,1062 @@
+openapi: 3.0.3
+info:
+  title: BBMRI-ERIC Negotiator
+  description: "BBMRI-ERIC Negotiator Service API. The Service is running at [https://negotiator.bbmri-eric.eu](https://negotiator.bbmri-eric.eu)"
+  version: 3.0.1
+servers:
+- url: /
+paths:
+  /status:
+    get:
+      tags:
+      - v2
+      summary: Get version and statistics of the called Negotiator instance.
+      description: "Listes depoyed version of the BBMRI-ERIC Negotiator service, basic\
+        \ statistic of the service."
+      operationId: status_get
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+        "400":
+          description: Invalid status value
+      x-openapi-router-controller: swagger_server.controllers.v2_controller
+  /directory/create_query:
+    post:
+      tags:
+      - v2
+      summary: Creates a new query.
+      description: "Takes a JSON query object with information of the search criteria\
+        \ and results of the directory. Stores it temporary in the database and returns\
+        \ a redirect URL for the directory. With this URL the directory can redirect\
+        \ the user to the query edit page. I case of updating a existing query or\
+        \ extending an exiting request, a token is provided for identification."
+      operationId: directory_create_query_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Query'
+        required: true
+      responses:
+        "201":
+          description: successful created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryCreateResponse'
+      deprecated: true
+      x-openapi-router-controller: swagger_server.controllers.v2_controller
+  /v2/list:
+    get:
+      tags:
+      - list
+      summary: List of Biobanks and Collections in all directories
+      description: Returns a JSON array with a hierarchical structure of all directories
+        integrated into the \Negotiator. For each directory all biobanks registered
+        are listed with the identifying ID of the directory. In the biobank a list
+        of all associated collections is listed.
+      operationId: v2_list_get
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+      x-openapi-router-controller: swagger_server.controllers.list_controller
+  /v2/io/export:
+    get:
+      tags:
+      - request
+      summary: Get request details by requestId
+      description: Get detailed data for a request by requestId
+      operationId: v2_io_export_get
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/io_export_body'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
+      x-openapi-router-controller: swagger_server.controllers.request_controller
+  /v2/io/import:
+    post:
+      tags:
+      - request
+      summary: Import a request to negotiator
+      description: Import a request to negotiator
+      operationId: v2_io_import_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-openapi-router-controller: swagger_server.controllers.request_controller
+  /perun/users:
+    post:
+      tags:
+      - perun
+      summary: Update AAI user information
+      description: Update AAI user information from biobanks and collections
+      operationId: perun_users_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AAIUser'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+      x-openapi-router-controller: swagger_server.controllers.perun_controller
+  /perun/networks/users:
+    post:
+      tags:
+      - perun
+      summary: Update AAI user information for network users
+      description: Update AAI user information from networks
+      operationId: perun_networks_users_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AAIUserMapping'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+      x-openapi-router-controller: swagger_server.controllers.perun_controller
+  /perun/mapping:
+    post:
+      tags:
+      - perun
+      summary: Update AAI user collection mapping
+      description: Update AAI user collections mapping
+      operationId: perun_mapping_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AAIUser'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+      x-openapi-router-controller: swagger_server.controllers.perun_controller
+  /perun/networks/mapping:
+    post:
+      tags:
+      - perun
+      summary: Update AAI user network mapping
+      description: Update AAI user network mapping
+      operationId: perun_networks_mapping_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AAIUser'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+      x-openapi-router-controller: swagger_server.controllers.perun_controller
+  /v3/data-sources:
+    get:
+      tags:
+      - v3
+      summary: Gets the list of data sources registered in this Negotiator
+      operationId: v3_data_sources_get
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataSource'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+  /v3/data-sources/{dataSourceId}:
+    get:
+      tags:
+      - v3
+      summary: Retrieves data of a data source
+      description: Retrieves data of the data source identified by data-source-id
+      operationId: v3_data_sources_data_source_id_get
+      parameters:
+      - name: dataSourceId
+        in: path
+        description: the id of the data source to retrieve
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+        "404":
+          description: Data source with the specified id not found in the Negotiator
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+  /v3/queries:
+    post:
+      tags:
+      - v3
+      summary: Creates a query for a Data Source
+      description: "Create a query for the data source identified by {dataSourceId}"
+      operationId: v3_queries_post
+      parameters:
+      - name: Prefer
+        in: header
+        description: specifies whether to return all data of the created query or
+          just the id. By default it just the id is returned
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - return=representation
+          - return=minimal
+          default: return=minimal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryCreateV3'
+        required: true
+      responses:
+        "201":
+          description: Query created correctly
+          headers:
+            Location:
+              description: "the location of the newly created query (e.g., /v3/data-sources/{dataSourceId}/queries/1)"
+              style: simple
+              explode: false
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponseV3'
+        "400":
+          description: There was an error in the request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Data source with the specified id not found in the Negotiator
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+  /v3/queries/{queryId}:
+    get:
+      tags:
+      - v3
+      summary: Retrieves data of a specific query
+      operationId: v3_queries_query_id_get
+      parameters:
+      - name: queryId
+        in: path
+        description: the id of the query to retrieve
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Query created correctly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponseV3'
+        "404":
+          description: Data source or Query with the specified id not found in the
+            Negotiator
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+  /v3/projects:
+    get:
+      tags:
+      - v3
+      summary: Get the list of projects
+      description: Get the list of projects. It is possible to filter by user id
+      operationId: v3_projects_get
+      parameters:
+      - name: user
+        in: query
+        description: the id of the user used to filter the projects
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCreateResponseV3'
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+    post:
+      tags:
+      - v3
+      summary: Create a new project in the negotiator
+      description: Create a new project in the negotiator
+      operationId: v3_projects_post
+      parameters:
+      - name: Prefer
+        in: header
+        description: specifies whether to return all data of the created project or
+          just the id. By default just the id is returned
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - return=representation
+          - return=minimal
+          default: return=minimal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreateV3'
+        required: true
+      responses:
+        "201":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCreateResponseV3'
+        "401":
+          description: Invalid input
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+  /v3/projects/{projectId}:
+    get:
+      tags:
+      - v3
+      summary: Retrieve a project in the negotiator by Id
+      description: Retrieve a project in the negotiator by Id
+      operationId: v3_projects_project_id_get
+      parameters:
+      - name: projectId
+        in: path
+        description: Id of project to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectCreateResponseV3'
+        "404":
+          description: Project not found
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+    put:
+      tags:
+      - v3
+      summary: Update the project identified by Id
+      description: Update the project identified by Id
+      operationId: v3_projects_project_id_put
+      parameters:
+      - name: projectId
+        in: path
+        description: Id of project to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreateV3'
+        required: true
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Project not found
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+  /v3/requests:
+    post:
+      tags:
+      - v3
+      summary: Creates a request
+      operationId: v3_requests_post
+      parameters:
+      - name: Prefer
+        in: header
+        description: specifies whether to return all data of the created request or
+          just the id. By default it just the id is returned
+        required: false
+        style: simple
+        explode: false
+        schema:
+          type: string
+          enum:
+          - return=representation
+          - return=minimal
+          default: return=minimal
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestCreateV3'
+      responses:
+        "201":
+          description: Request created successfully
+          headers:
+            Location:
+              description: "The location of the newly created request (e.g., /v3/requests/1)"
+              style: simple
+              explode: false
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestResponseV3'
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+  /v3/requests/{requestId}:
+    get:
+      tags:
+      - v3
+      summary: "Retrieves the request with id {requestId}"
+      operationId: v3_requests_request_id_get
+      parameters:
+      - name: requestId
+        in: path
+        description: The id of the request to get/update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Request updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestResponseV3'
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+    put:
+      tags:
+      - v3
+      summary: "Updates the request with id {requestId}"
+      operationId: v3_requests_request_id_put
+      parameters:
+      - name: requestId
+        in: path
+        description: The id of the request to get/update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestCreateV3'
+      responses:
+        "204":
+          description: Request updated successfully
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+  /v3/users/:
+    get:
+      tags:
+      - v3
+      description: Endpoint used to search for users by some parameters ids
+      operationId: v3_users_get
+      parameters:
+      - name: projectId
+        in: query
+        description: specifies the id of the project the users are involved in
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      - name: requestId
+        in: query
+        description: specifies the id of the request the users are involved in
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: Successful search
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserV3'
+                x-content-type: application/json
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.v3_controller
+components:
+  schemas:
+    Status:
+      type: object
+      properties:
+        biobanks:
+          type: integer
+          description: number of registered biobanks in the Negotiator instance
+          format: int64
+          example: 1791
+        attachments:
+          type: integer
+          description: number of attachments uploaded into the system
+          format: int64
+          example: 111
+        collections:
+          type: integer
+          description: number of registered collections in the Negotiator instance
+          format: int64
+          example: 4515
+        queriesWithMatches:
+          type: integer
+          description: number of queries with at least one matching collection
+          format: int64
+          example: 271
+        buildTime:
+          pattern: "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"
+          type: string
+          description: date/time when current Negotiator version was built
+          example: 2020-09-10 11:25
+        used:
+          type: integer
+          description: used diskspace on the system
+          format: int64
+          example: 49476
+        free:
+          type: integer
+          description: free diskspace on the system
+          format: int64
+          example: 49173
+        queries:
+          type: integer
+          description: total number of queries registered in the Negotiator instance
+          format: int64
+          example: 285
+        version:
+          type: string
+          description: version of the Negotiator instance
+          example: 2.1.2-SNAPSHOT
+        users:
+          type: integer
+          description: number of users registered  in the Negotiator instance
+          format: int64
+          example: 364
+      example:
+        biobanks: 1791
+        attachments: 111
+        collections: 4515
+        buildTime: 2020-09-10 11:25
+        used: 49476
+        queriesWithMatches: 271
+        free: 49173
+        queries: 285
+        version: 2.1.2-SNAPSHOT
+        users: 364
+    Query:
+      type: object
+      properties:
+        URL:
+          type: string
+        humanReadable:
+          type: string
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Query_collections'
+    QueryCreateResponse:
+      type: object
+      properties:
+        redirect_uri:
+          type: string
+      example:
+        redirect_uri: redirect_uri
+    List:
+      type: array
+      items:
+        $ref: '#/components/schemas/List_inner'
+    AAIUser:
+      type: array
+      items:
+        $ref: '#/components/schemas/AAIUser_inner'
+    AAIUserMapping:
+      type: array
+      items:
+        $ref: '#/components/schemas/AAIUserMapping_inner'
+    Request:
+      type: object
+      properties:
+        requestId:
+          type: integer
+          format: int64
+        title:
+          type: string
+        projectDescription:
+          type: string
+        requestDescription:
+          type: string
+        ethicsVote:
+          type: string
+        testRequest:
+          type: boolean
+        creationTime:
+          pattern: "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"
+          type: string
+          description: date/time when request was created
+          example: 2020-09-10 11:25
+        collections:
+          type: array
+          description: array of collection involved in the request (optional)
+          items:
+            $ref: '#/components/schemas/Query_collections'
+        query:
+          type: array
+          items:
+            $ref: '#/components/schemas/Request_query'
+      example:
+        creationTime: 2020-09-10 11:25
+        testRequest: true
+        collections:
+        - biobankId: biobankId
+          collectionId: collectionId
+        - biobankId: biobankId
+          collectionId: collectionId
+        requestId: 0
+        query:
+        - queryParameters: queryParameters
+          numberOfCollections: 6
+          humanReadable: selected countries are AT
+          url: url
+        - queryParameters: queryParameters
+          numberOfCollections: 6
+          humanReadable: selected countries are AT
+          url: url
+        projectDescription: projectDescription
+        ethicsVote: ethicsVote
+        title: title
+        requestDescription: requestDescription
+    DataSource:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the data source in the negotiator
+          format: int64
+        name:
+          type: string
+          description: Name of the DataSource
+        url:
+          type: string
+          description: URL of the DataSource
+        description:
+          type: string
+          description: Description of the DataSource
+        biobanks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Biobank'
+      example:
+        biobanks:
+        - collections:
+          - name: name
+            id: id
+          - name: name
+            id: id
+          name: name
+          id: id
+        - collections:
+          - name: name
+            id: id
+          - name: name
+            id: id
+          name: name
+          id: id
+        name: name
+        description: description
+        id: 0
+        url: url
+    Biobank:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the biobank in the datasource
+        name:
+          type: string
+          description: Name of the biobank in the data source
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
+      example:
+        collections:
+        - name: name
+          id: id
+        - name: name
+          id: id
+        name: name
+        id: id
+    Collection:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Id of the collecion in the data source
+        name:
+          type: string
+          description: Name of the collecion in the data source
+      example:
+        name: name
+        id: id
+    QueryCreateV3:
+      type: object
+      properties:
+        url:
+          type: string
+        humanReadable:
+          type: string
+        collections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Query_collections'
+    QueryV3:
+      allOf:
+      - $ref: '#/components/schemas/QueryCreateV3'
+      - type: object
+        properties:
+          id:
+            type: integer
+            description: Id of the query generated
+            format: int64
+    QueryResponseV3:
+      allOf:
+      - $ref: '#/components/schemas/QueryV3'
+      - type: object
+        properties:
+          redirectUrl:
+            type: string
+    RequestCreateV3:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        projectDescription:
+          type: string
+        ethicsVote:
+          type: string
+        isTest:
+          type: boolean
+        queries:
+          type: array
+          items:
+            $ref: '#/components/schemas/QueryV3'
+        project:
+          type: integer
+          format: int64
+    RequestResponseV3:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/RequestCreateV3'
+      - properties:
+          id:
+            type: integer
+            description: Id of the generated request
+            format: int64
+    ProjectCreateV3:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        ethicsVote:
+          type: string
+        expectedEndTime:
+          pattern: "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"
+          type: string
+          description: date/time when project will probably end
+          example: 2020-09-10 11:25
+    ProjectCreateResponseV3:
+      allOf:
+      - $ref: '#/components/schemas/ProjectCreateV3'
+      - type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          creationTime:
+            pattern: "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$"
+            type: string
+            description: date/time when project was created
+            example: 2020-09-10 11:25
+    UserV3:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: the id of the user
+          format: int64
+        auth_subject:
+          type: string
+        auth_name:
+          type: string
+          description: user name
+        auth_email:
+          type: string
+        organization:
+          type: string
+        is_admin:
+          type: boolean
+      example:
+        is_admin: true
+        auth_name: auth_name
+        auth_subject: auth_subject
+        organization: organization
+        id: 0
+        auth_email: auth_email
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: A code of the error
+        message:
+          type: string
+          description: A short message describing the error
+    io_export_body:
+      type: object
+      properties:
+        requestId:
+          type: integer
+          format: int64
+          example: 131
+    inline_response_200:
+      type: object
+      properties:
+        requestId:
+          type: integer
+          format: int64
+          example: 131
+        requestURL:
+          type: string
+      example:
+        requestId: 131
+        requestURL: requestURL
+    Query_collections:
+      type: object
+      properties:
+        biobankId:
+          type: string
+        collectionId:
+          type: string
+      example:
+        biobankId: biobankId
+        collectionId: collectionId
+    List_inner:
+      type: object
+      properties:
+        directory:
+          type: object
+          properties:
+            name:
+              type: string
+            url:
+              type: string
+            description:
+              type: string
+            Biobanks:
+              type: array
+              items:
+                type: object
+                properties:
+                  directory_id:
+                    type: string
+                  name:
+                    type: string
+                  collections:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        directory_id:
+                          type: string
+                        name:
+                          type: string
+                      example:
+                        name: name
+                        directory_id: directory_id
+                example:
+                  collections:
+                  - name: name
+                    directory_id: directory_id
+                  - name: name
+                    directory_id: directory_id
+                  name: name
+                  directory_id: directory_id
+          example:
+            Biobanks:
+            - collections:
+              - name: name
+                directory_id: directory_id
+              - name: name
+                directory_id: directory_id
+              name: name
+              directory_id: directory_id
+            - collections:
+              - name: name
+                directory_id: directory_id
+              - name: name
+                directory_id: directory_id
+              name: name
+              directory_id: directory_id
+            name: name
+            description: description
+            url: url
+      example:
+        directory:
+          Biobanks:
+          - collections:
+            - name: name
+              directory_id: directory_id
+            - name: name
+              directory_id: directory_id
+            name: name
+            directory_id: directory_id
+          - collections:
+            - name: name
+              directory_id: directory_id
+            - name: name
+              directory_id: directory_id
+            name: name
+            directory_id: directory_id
+          name: name
+          description: description
+          url: url
+    AAIUser_inner:
+      type: object
+      properties:
+        organization:
+          type: string
+        id:
+          type: integer
+          format: int64
+        displayName:
+          type: string
+        status:
+          type: string
+        mail:
+          type: string
+        identities:
+          type: array
+          items:
+            type: string
+    AAIUserMapping_inner:
+      type: object
+      properties:
+        name:
+          type: string
+        directory:
+          type: string
+        id:
+          type: string
+        members:
+          type: array
+          items:
+            type: object
+            properties:
+              userId:
+                type: string
+    Request_query:
+      type: object
+      properties:
+        queryParameters:
+          type: string
+        humanReadable:
+          type: string
+          description: human readable version of the query
+          example: selected countries are AT
+        url:
+          type: string
+          description: redirect url to the directory
+        numberOfCollections:
+          type: integer
+          format: int64
+      description: array of queries for the request (optional)
+      example:
+        queryParameters: queryParameters
+        numberOfCollections: 6
+        humanReadable: selected countries are AT
+        url: url
+
