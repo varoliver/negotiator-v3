@@ -1,5 +1,6 @@
 import connexion
 import six
+import json
 
 from swagger_server.models.data_source import DataSource  # noqa: E501
 from swagger_server.models.error_response import ErrorResponse  # noqa: E501
@@ -23,7 +24,7 @@ def v3_data_sources_data_source_id_get(data_source_id):  # noqa: E501
 
     :rtype: DataSource
     """
-    return 'do some magic!'
+    return 'do some magic1!'
 
 
 def v3_data_sources_get():  # noqa: E501
@@ -34,7 +35,7 @@ def v3_data_sources_get():  # noqa: E501
 
     :rtype: List[DataSource]
     """
-    return 'do some magic!'
+    return 'do some magic2!'
 
 
 def v3_projects_get(user=None):  # noqa: E501
@@ -47,7 +48,25 @@ def v3_projects_get(user=None):  # noqa: E501
 
     :rtype: ProjectCreateResponseV3
     """
-    return 'do some magic!'
+    project_01 = {'id': '1',
+                  'title': 'Project 1',
+                  'description': 'description',
+                  'ethicsVote': 'ethicsVote',
+                  'creationTime': '2022-01-10 11:30',
+                  'expectedEndTime': '2023-01-10 11:30'
+                  }
+    project_02 = {'id': '2',
+                  'title': 'Project 2',
+                  'description': 'description',
+                  'ethicsVote': 'ethicsVote',
+                  'creationTime': '2022-02-03 10:00',
+                  'expectedEndTime': '2024-05-01 00:00'
+                  }
+    if (user == None):
+        return json.dumps([project_01, project_02])
+    if (user == 1):
+        return json.dumps([project_01])
+    return 'do some magic3!'
 
 
 def v3_projects_post(body, prefer=None):  # noqa: E501
@@ -64,7 +83,7 @@ def v3_projects_post(body, prefer=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = ProjectCreateV3.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return 'do some magic4!'
 
 
 def v3_projects_project_id_get(project_id):  # noqa: E501
@@ -77,7 +96,7 @@ def v3_projects_project_id_get(project_id):  # noqa: E501
 
     :rtype: ProjectCreateResponseV3
     """
-    return 'do some magic!'
+    return 'do some magic5!'
 
 
 def v3_projects_project_id_put(body, project_id):  # noqa: E501
@@ -94,7 +113,7 @@ def v3_projects_project_id_put(body, project_id):  # noqa: E501
     """
     if connexion.request.is_json:
         body = ProjectCreateV3.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return 'do some magic6!'
 
 
 def v3_queries_post(body, prefer=None):  # noqa: E501
@@ -111,7 +130,7 @@ def v3_queries_post(body, prefer=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = QueryCreateV3.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return 'do some magic7!'
 
 
 def v3_queries_query_id_get(query_id):  # noqa: E501
@@ -124,7 +143,7 @@ def v3_queries_query_id_get(query_id):  # noqa: E501
 
     :rtype: QueryResponseV3
     """
-    return 'do some magic!'
+    return 'do some magic8!'
 
 
 def v3_requests_post(body=None, prefer=None):  # noqa: E501
@@ -141,7 +160,7 @@ def v3_requests_post(body=None, prefer=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = RequestCreateV3.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return 'do some magic9!'
 
 
 def v3_requests_request_id_get(request_id):  # noqa: E501
@@ -154,7 +173,7 @@ def v3_requests_request_id_get(request_id):  # noqa: E501
 
     :rtype: RequestResponseV3
     """
-    return 'do some magic!'
+    return 'do some magic10!'
 
 
 def v3_requests_request_id_put(request_id, body=None):  # noqa: E501
@@ -171,7 +190,7 @@ def v3_requests_request_id_put(request_id, body=None):  # noqa: E501
     """
     if connexion.request.is_json:
         body = RequestCreateV3.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    return 'do some magic11!'
 
 
 def v3_users_get(project_id=None, request_id=None):  # noqa: E501
@@ -186,4 +205,4 @@ def v3_users_get(project_id=None, request_id=None):  # noqa: E501
 
     :rtype: List[UserV3]
     """
-    return 'do some magic!'
+    return 'do some magic12!'
