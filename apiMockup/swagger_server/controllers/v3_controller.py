@@ -14,6 +14,35 @@ from swagger_server.models.user_v3 import UserV3  # noqa: E501
 from swagger_server import util
 
 
+project_01 = {'id': '1',
+                  'title': 'Project 1',
+                  'description': 'description',
+                  'ethicsVote': 'ethicsVote',
+                  'creationTime': '2022-01-10 11:30',
+                  'expectedEndTime': '2023-01-10 11:30'
+                  }
+project_02 = {'id': '2',
+                  'title': 'Project 2',
+                  'description': 'description',
+                  'ethicsVote': 'ethicsVote',
+                  'creationTime': '2022-02-03 10:00',
+                  'expectedEndTime': '2024-05-01 00:00'
+                  }
+project_03 = {'id': '3',
+                  'title': 'Project 3',
+                  'description': 'description',
+                  'ethicsVote': 'ethicsVote',
+                  'creationTime': '2022-02-03 10:00',
+                  'expectedEndTime': '2024-05-01 00:00'
+                  }
+project_04 = {'id': '4',
+                  'title': 'Project 4',
+                  'description': 'description',
+                  'ethicsVote': 'ethicsVote',
+                  'creationTime': '2022-02-03 10:00',
+                  'expectedEndTime': '2024-05-01 00:00'
+                  }
+
 def v3_data_sources_data_source_id_get(data_source_id):  # noqa: E501
     """Retrieves data of a data source
 
@@ -48,22 +77,8 @@ def v3_projects_get(user=None):  # noqa: E501
 
     :rtype: ProjectCreateResponseV3
     """
-    project_01 = {'id': '1',
-                  'title': 'Project 1',
-                  'description': 'description',
-                  'ethicsVote': 'ethicsVote',
-                  'creationTime': '2022-01-10 11:30',
-                  'expectedEndTime': '2023-01-10 11:30'
-                  }
-    project_02 = {'id': '2',
-                  'title': 'Project 2',
-                  'description': 'description',
-                  'ethicsVote': 'ethicsVote',
-                  'creationTime': '2022-02-03 10:00',
-                  'expectedEndTime': '2024-05-01 00:00'
-                  }
     if (user == None):
-        return json.dumps([project_01, project_02])
+        return json.dumps([project_01, project_02, project_03, project_04])
     if (user == 1):
         return json.dumps([project_01])
     return 'do some magic3!'
@@ -96,6 +111,14 @@ def v3_projects_project_id_get(project_id):  # noqa: E501
 
     :rtype: ProjectCreateResponseV3
     """
+    if (project_id == 1):
+        return json.dumps([project_01])
+    if (project_id == 2):
+        return json.dumps([project_02])
+    if (project_id == 3):
+        return json.dumps([project_03])
+    if (project_id == 4):
+        return json.dumps([project_04])
     return 'do some magic5!'
 
 
