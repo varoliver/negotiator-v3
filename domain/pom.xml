@@ -2,7 +2,21 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>negotiator</artifactId>
+    <groupId>eu.bbmri.eric.csit.service</groupId>
+    <!--    <relativePath/>-->
+    <version>3.0.1</version>
+  </parent>
+
   <artifactId>domain</artifactId>
+
+  <properties>
+    <version.hibernate-types-55>2.14.0</version.hibernate-types-55>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -15,18 +29,4 @@
       <version>2.14.0</version>
     </dependency>
   </dependencies>
-  <modelVersion>4.0.0</modelVersion>
-  <packaging>jar</packaging>
-
-  <parent>
-    <artifactId>negotiator</artifactId>
-    <groupId>eu.bbmri.eric.csit.service</groupId>
-    <relativePath/>
-    <version>3.0.1</version>
-  </parent>
-
-  <properties>
-    <version.hibernate-types-55>2.14.0</version.hibernate-types-55>
-  </properties>
-
 </project>
